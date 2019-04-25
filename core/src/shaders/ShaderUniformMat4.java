@@ -20,34 +20,28 @@
  * SOFTWARE.
  */
 
-package display;
+package shaders;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.vector.Matrix4f;
 
-public class DisplayManager {
-	public static void openDisplay(){
-		try {
-			Display.setFullscreen(true);
-			Display.create(new PixelFormat(), new ContextAttribs(3,2).withProfileCore(true).withForwardCompatible(true));
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+import java.nio.FloatBuffer;
+
+public class ShaderUniformMat4 extends ShaderUniform {
+	private static final FloatBuffer buf = BufferUtils.createFloatBuffer(16);
+
+	public ShaderUniformMat4(int location) {
+		super(location);
 	}
 
-	public static void updateDisplay(){
-		Display.update();
-		Display.sync(60);
+	public ShaderUniformMat4(String name) {
+		super(name);
 	}
 
-	public static void closeDisplay(){
-		Display.destroy();
-	}
-
-	public static boolean closeRequested() {
-		return Display.isCloseRequested();
+	public void load(Matrix4f mat) {
+		mat.store(buf);
+		buf.flip();
+		GL20.glUniformMatrix4(this.location, false, buf);
 	}
 }

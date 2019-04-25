@@ -20,34 +20,19 @@
  * SOFTWARE.
  */
 
-package display;
+package data;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.PixelFormat;
+import java.io.InputStream;
 
-public class DisplayManager {
-	public static void openDisplay(){
-		try {
-			Display.setFullscreen(true);
-			Display.create(new PixelFormat(), new ContextAttribs(3,2).withProfileCore(true).withForwardCompatible(true));
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+public class IN {
+	static IN defaultNullStream = new IN(null);
+	private InputStream ins;
+
+	public IN(InputStream ins) {
+		this.ins = ins;
 	}
 
-	public static void updateDisplay(){
-		Display.update();
-		Display.sync(60);
-	}
-
-	public static void closeDisplay(){
-		Display.destroy();
-	}
-
-	public static boolean closeRequested() {
-		return Display.isCloseRequested();
+	public InputStream getInputStream() {
+		return ins;
 	}
 }

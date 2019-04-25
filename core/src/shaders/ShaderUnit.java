@@ -20,34 +20,36 @@
  * SOFTWARE.
  */
 
-package display;
+package shaders;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.PixelFormat;
+import data.GameData;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import utils.GU;
 
-public class DisplayManager {
-	public static void openDisplay(){
-		try {
-			Display.setFullscreen(true);
-			Display.create(new PixelFormat(), new ContextAttribs(3,2).withProfileCore(true).withForwardCompatible(true));
-		} catch (LWJGLException e) {
-			e.printStackTrace();
+public class ShaderUnit {
+	private int type;
+	private String name;
+	private String src;
+	private int id;
+
+	public ShaderUnit(int type, String name) {
+		this.type = type;
+		this.name = name;
+	}
+
+	public void loadSource() {
+		src = GU.content(GameData.input(name));
+	}
+
+	public void addTo(ShaderProgram program) {
+		id = GL20.glCreateShader(type);
+		GL20.glShaderSource(id, src);
+		GL20.glCompileShader(id);
+		if (GL20.glGetShaderi(id, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE) {
+			System.err.println(GL20.glGetShaderInfoLog(id, 300));
 			System.exit(-1);
 		}
-	}
-
-	public static void updateDisplay(){
-		Display.update();
-		Display.sync(60);
-	}
-
-	public static void closeDisplay(){
-		Display.destroy();
-	}
-
-	public static boolean closeRequested() {
-		return Display.isCloseRequested();
+		GL20.glAttachShader(program.progid, id);
 	}
 }

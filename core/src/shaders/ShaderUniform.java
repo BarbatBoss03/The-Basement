@@ -20,34 +20,24 @@
  * SOFTWARE.
  */
 
-package display;
+package shaders;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.PixelFormat;
+public abstract class ShaderUniform {
+	protected int location;
+	private String name;
 
-public class DisplayManager {
-	public static void openDisplay(){
-		try {
-			Display.setFullscreen(true);
-			Display.create(new PixelFormat(), new ContextAttribs(3,2).withProfileCore(true).withForwardCompatible(true));
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+	public ShaderUniform(int location) {
+		this.location = location;
 	}
 
-	public static void updateDisplay(){
-		Display.update();
-		Display.sync(60);
+	public ShaderUniform(String name) {
+		this.name = name;
 	}
 
-	public static void closeDisplay(){
-		Display.destroy();
-	}
-
-	public static boolean closeRequested() {
-		return Display.isCloseRequested();
+	public void bind(ShaderProgram program) {
+		if (name != null)
+			location = program.getUniformLocation(name);
+		if (location == 0)
+			System.err.println("WARNING: UNIFORM \"" + name + "\" not found in shader \"" + program.getClass().getName() + "\"");
 	}
 }

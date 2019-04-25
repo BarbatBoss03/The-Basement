@@ -20,34 +20,14 @@
  * SOFTWARE.
  */
 
-package display;
+package shaders;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.PixelFormat;
-
-public class DisplayManager {
-	public static void openDisplay(){
-		try {
-			Display.setFullscreen(true);
-			Display.create(new PixelFormat(), new ContextAttribs(3,2).withProfileCore(true).withForwardCompatible(true));
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+public class ShaderUniformVec2 extends ShaderUniform {
+	public ShaderUniformVec2(int location) {
+		super(location);
 	}
 
-	public static void updateDisplay(){
-		Display.update();
-		Display.sync(60);
-	}
-
-	public static void closeDisplay(){
-		Display.destroy();
-	}
-
-	public static boolean closeRequested() {
-		return Display.isCloseRequested();
+	public ShaderUniformVec2(String name) {
+		super(name);
 	}
 }

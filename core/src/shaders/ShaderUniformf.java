@@ -20,34 +20,20 @@
  * SOFTWARE.
  */
 
-package display;
+package shaders;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.opengl.GL20;
 
-public class DisplayManager {
-	public static void openDisplay(){
-		try {
-			Display.setFullscreen(true);
-			Display.create(new PixelFormat(), new ContextAttribs(3,2).withProfileCore(true).withForwardCompatible(true));
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+public class ShaderUniformf extends ShaderUniform {
+	public ShaderUniformf(int id) {
+		super(id);
 	}
 
-	public static void updateDisplay(){
-		Display.update();
-		Display.sync(60);
+	public ShaderUniformf(String name) {
+		super(name);
 	}
 
-	public static void closeDisplay(){
-		Display.destroy();
-	}
-
-	public static boolean closeRequested() {
-		return Display.isCloseRequested();
+	public void load(float f) {
+		GL20.glUniform1f(this.location, f);
 	}
 }

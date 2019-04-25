@@ -20,34 +20,21 @@
  * SOFTWARE.
  */
 
-package display;
+package data;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.PixelFormat;
+import utils.GU;
 
-public class DisplayManager {
-	public static void openDisplay(){
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+public class GameData {
+	public static IN input(String name) {
 		try {
-			Display.setFullscreen(true);
-			Display.create(new PixelFormat(), new ContextAttribs(3,2).withProfileCore(true).withForwardCompatible(true));
-		} catch (LWJGLException e) {
+			return new IN(new FileInputStream(GU.gameDataPath + name));
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-	}
-
-	public static void updateDisplay(){
-		Display.update();
-		Display.sync(60);
-	}
-
-	public static void closeDisplay(){
-		Display.destroy();
-	}
-
-	public static boolean closeRequested() {
-		return Display.isCloseRequested();
+		return IN.defaultNullStream;
 	}
 }
